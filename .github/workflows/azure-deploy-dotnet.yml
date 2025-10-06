@@ -1,28 +1,43 @@
-name: Build and Deploy Demo App (.NET)
+name: Build and Deploy .NET App
 
 on:
   push:
     branches:
       - main
 
-env:
-  APP_NAME: dummy-app
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      APP_NAME: dummy-dotnet-app
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
 
-      - name: Simulate Build
-        run: echo "No .NET project found — skipping build"
+      - name: Restore and Build
+        run: |
+          if ls *.sln 1> /dev/null 2>&1; then
+            dotnet restore
+            dotnet build --no-restore
+          else
+            echo "⚠️ No .NET solution found, skipping build"
+          fi
 
-      - name: Simulate Azure Deployment
-        run: echo "✅ Simulated deploy to Azure Web App: $APP_NAME (no real credentials)"
+      # ✅ Deployment Step (real or simulated)
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+        continue-on-error: true
 
+      - name: Simulate Deployment (if no Azure credentials)
+        if: failure()
+        run: echo "✅ Simulated deployment for .NET app"
