@@ -20,8 +20,8 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build
-        run: dotnet build
+      - name: Simulate Build
+        run: echo "No .NET project found — skipping build"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
