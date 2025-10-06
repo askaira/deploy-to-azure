@@ -23,8 +23,6 @@ jobs:
       - name: Simulate Build
         run: echo "No .NET project found — skipping build"
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ env.APP_NAME }}
-          publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Simulate Azure Deployment
+        run: echo "✅ Simulated deploy to Azure Web App: $APP_NAME (no real credentials)"
+
