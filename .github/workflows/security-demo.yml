@@ -1,0 +1,49 @@
+name: Security and Compliance Demo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  security-simulation:
+    runs-on: ubuntu-latest
+    env:
+      # Reference dummy secrets securely
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      APP_NAME: ${{ secrets.APP_NAME }}
+      DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show that secrets are stored safely
+        run: |
+          echo "Secrets are loaded, but not visible in logs!"
+          echo "✅ Using secrets securely without printing them."
+
+      - name: Simulate using environment variables
+        run: |
+          echo "Application Name: $APP_NAME"
+          echo "Deployment Environment: $DEPLOY_ENV"
+
+      - name: Simulate OIDC Authentication (Passwordless)
+        run: |
+          echo "🔐 This step represents Azure OIDC-based authentication."
+          echo "OIDC allows GitHub to authenticate to Azure without secrets."
+          echo "Learn more: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-azure"
+
+      - name: Simulate Monitoring and Logging
+        run: |
+          echo "📊 Viewing this workflow's logs in GitHub Actions is similar to checking Azure Monitor."
+          echo "All steps are tracked under the 'Actions' tab."
+          echo "✅ Monitoring complete!"
+
+      - name: Compliance Record Example
+        run: |
+          echo "🧩 Example Compliance Policy:"
+          echo "- All secrets are stored in GitHub Secrets"
+          echo "- Workflows do not expose sensitive data"
+          echo "- Deployment logs are reviewed for every run"
